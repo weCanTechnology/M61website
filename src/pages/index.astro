@@ -1,22 +1,28 @@
 ---
-// src/pages/index.astro
-import MainLayout from "../layouts/MainLayout.astro";
-import { featuredBlogPosts, showCareerSection } from "../data/content";
-
-// Szekció komponensek importálása
-import Hero from "../components/sections/Hero.astro";
-import AboutUs from "../components/sections/AboutUs.astro";
-import OurServices from "../components/sections/OurServices.astro";
-import Blog from "../components/sections/Blog.astro";
-import Contact from "../components/sections/Contact.astro";
-import Career from "../components/sections/Career.astro";
+// M61 agent thruster — main landing page.
+// Site root: m61.ai
+import M61Layout from "../layouts/M61Layout.astro";
+import Lockup from "../components/m61/Lockup.astro";
+import Proof from "../components/m61/Proof.astro";
+import Method from "../components/m61/Method.astro";
+import Notes from "../components/m61/Notes.astro";
+import Outro from "../components/m61/Outro.astro";
+import Contact from "../components/m61/Contact.astro";
 ---
 
-<MainLayout title="weCan Techology – Digitizing with Cloud 1st approach" isHomepage={true}>
-  <Hero />
-  <OurServices />
-  <AboutUs />
-  <Contact/>
-  <Blog blogPosts={featuredBlogPosts} withBottomSpacing={!showCareerSection} />
-  {showCareerSection && <Career />}
-</MainLayout>
+<M61Layout
+  title="M61 Agent Thruster"
+  description="M61 agent thruster: golden datasets, complex evals and solver-driven optimisation for agentic AI in business-critical processes. By weCan Technology."
+>
+  <header>
+    <Lockup />
+    <h1>Agentic AI starts where demos end</h1>
+    <p class="lede">Reaching 70–80% accuracy takes days. A business-critical process needs 98–99%, and control over the errors that remain. That work only begins once the system already looks finished.</p>
+  </header>
+
+  <Proof />
+  <Method />
+  <Notes />
+  <Outro />
+  <Contact />
+</M61Layout>

@@ -1,0 +1,19 @@
+---
+// HU / EN switch. Current language is rendered as a slab; the other as a link.
+import type { Lang } from "../../data/ai2026summit";
+export interface Props {
+  current: Lang;
+  links: Record<Lang, string>;
+}
+const { current, links } = Astro.props;
+const labels: Record<Lang, string> = { hu: "HU", en: "EN" };
+const order: Lang[] = ["en", "hu"];
+---
+
+<nav class="lang" aria-label={current === "hu" ? "Nyelv" : "Language"}>
+  {order.map((l) =>
+    l === current
+      ? <span class="slab" aria-current="page" lang={l}>{labels[l]}</span>
+      : <a href={links[l]} hreflang={l} lang={l}>{labels[l]}</a>
+  )}
+</nav>

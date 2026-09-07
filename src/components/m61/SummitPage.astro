@@ -1,0 +1,60 @@
+---
+// AI Summit 2026 lead-capture page, rendered per language.
+import M61Layout from "../../layouts/M61Layout.astro";
+import Lockup from "./Lockup.astro";
+import LangSwitch from "./LangSwitch.astro";
+import LeadForm from "./LeadForm.astro";
+import { form, routes, EVENT_NAME, EVENT_CITY, type Lang } from "../../data/ai2026summit";
+
+export interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = form[lang];
+const site = "https://m61.ai";
+const alternates = [
+  { hreflang: "hu", href: site + routes.hu.form },
+  { hreflang: "en", href: site + routes.en.form },
+  { hreflang: "x-default", href: site + routes.en.form },
+];
+---
+
+<M61Layout lang={lang} title={t.title} description={t.description} noindex alternates={alternates}>
+  <header>
+    <div class="masthead">
+      <Lockup />
+      <LangSwitch current={lang} links={{ hu: routes.hu.form, en: routes.en.form }} />
+    </div>
+  </header>
+
+  <div class="card">
+    <div class="card-top">
+      <span class="slab">{EVENT_NAME}</span>
+      <span class="where">{EVENT_CITY}</span>
+    </div>
+
+    <h1 class="card-title">{t.headlineBefore}<b>{EVENT_NAME}</b>{t.headlineAfter}</h1>
+
+    <LeadForm
+      source="m61-ai2026summit"
+      subject={t.subject}
+      hidden={{ lang }}
+      privacyHref={routes[lang].privacy}
+      nameLabel={t.nameLabel}
+      namePlaceholder={t.namePlaceholder}
+      emailLabel={t.emailLabel}
+      emailPlaceholder={t.emailPlaceholder}
+      consentText={t.consentText}
+      privacyLinkText={t.privacyLinkText}
+      submitLabel={t.submitLabel}
+      pendingLabel={t.pendingLabel}
+      successText={t.successText}
+      errorText={t.errorText}
+    />
+
+    <div class="card-foot">
+      <b>{t.footTitle}</b>
+      <span>{t.footSub}</span>
+    </div>
+  </div>
+
+  <a class="back" href="/">{t.backLink}</a>
+</M61Layout>

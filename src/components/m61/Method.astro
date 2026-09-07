@@ -1,0 +1,36 @@
+---
+// The four-stage M61 method. Numbered because it is a real pipeline.
+const stages = [
+  {
+    title: "Golden dataset",
+    body: "Historical records carry their own error rate, often hold several correct answers to one question, and rarely contain literal inputs. M61 sorts them into the statistically reliable, the clustered variants that hide local practice, and plain human error, then extends the set synthetically until every rule is covered.",
+  },
+  {
+    title: "Complex eval",
+    body: "Correctness is not the only requirement. Confidence calibration, latency and token use are scored alongside accuracy, each part of the process weighted by what an error there actually costs. Expert review folds back into the same score.",
+  },
+  {
+    title: "Solver",
+    body: "Topology, prompts, model choice and deterministic tools form a space too large to search by hand. A human-supervised solver searches it against your eval, on separated training and validation data, with the final measurement taken on data it never saw.",
+  },
+  {
+    title: "Operations",
+    body: "Every agent registered, run and monitored in one place: business correctness, resource use, audit. Handled uniformly rather than use case by use case, so the thousandth agent costs what the tenth did.",
+  },
+];
+---
+
+<section>
+  <h2>The method</h2>
+  <div class="stages">
+    {stages.map((stage, i) => (
+      <div class="stage">
+        <span class="slab">{String(i + 1).padStart(2, "0")}</span>
+        <div>
+          <h3>{stage.title}</h3>
+          <p>{stage.body}</p>
+        </div>
+      </div>
+    ))}
+  </div>
+</section>

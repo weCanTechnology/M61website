@@ -1,0 +1,33 @@
+---
+// "Talk to us": the lead form on the main landing page. Posts to the shared weCan Formspree form.
+import LeadForm from "./LeadForm.astro";
+import { company } from "../../data/company";
+---
+
+<section class="card" id="contact">
+  <div class="card-top">
+    <span class="slab">Talk to us</span>
+    <a class="where" href={`mailto:${company.email}?subject=M61%20agent%20thruster`}>{company.email}</a>
+  </div>
+
+  <h2 class="card-title">Tell us about the process you want to automate. We will come back with a plan and a price.</h2>
+
+  <LeadForm
+    source="m61-landing"
+    subject="[M61] Enquiry from m61.ai"
+    privacyHref="/privacy/"
+    nameLabel="Your name"
+    namePlaceholder="How should we address you?"
+    emailLabel="Work email"
+    emailPlaceholder="name@company.com"
+    companyLabel="Company"
+    messageLabel="What are you trying to automate?"
+    messagePlaceholder="A sentence or two is enough."
+    consentText="I agree that weCan Technology processes these details in order to respond to my enquiry."
+    privacyLinkText="Privacy notice"
+    submitLabel="Send enquiry"
+    pendingLabel="Sending…"
+    successText="Thank you. We will be in touch shortly."
+    errorText={`Something went wrong. Please try again, or email ${company.email}.`}
+  />
+</section>

@@ -1,0 +1,39 @@
+---
+// Renders a NoticeCopy document (privacy notice) in the M61 layout.
+import M61Layout from "../../layouts/M61Layout.astro";
+import Lockup from "./Lockup.astro";
+import LangSwitch from "./LangSwitch.astro";
+import type { Lang, NoticeCopy } from "../../data/ai2026summit";
+
+export interface Props {
+  lang: Lang;
+  copy: NoticeCopy;
+  backHref: string;
+  langLinks?: Record<Lang, string>;
+  alternates?: { hreflang: string; href: string }[];
+}
+const { lang, copy: t, backHref, langLinks, alternates = [] } = Astro.props;
+---
+
+<M61Layout lang={lang} title={t.title} description={t.description} noindex alternates={alternates}>
+  <header>
+    <div class="masthead">
+      <a href={backHref}><Lockup /></a>
+      {langLinks && <LangSwitch current={lang} links={langLinks} />}
+    </div>
+    <span class="slab">{t.slab}</span>
+    <h1 class="h-doc">{t.heading}</h1>
+    <p class="lede">{t.effective}</p>
+  </header>
+
+  <section class="doc">
+    {t.sections.map((s) => (
+      <>
+        <h2>{s.title}</h2>
+        {s.blocks.map((html) => <Fragment set:html={html} />)}
+      </>
+    ))}
+  </section>
+
+  <a class="back" href={backHref}>{t.backLink}</a>
+</M61Layout>

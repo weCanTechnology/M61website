@@ -1,0 +1,147 @@
+---
+// Name + email lead capture, posted to the shared weCan Formspree form via fetch.
+// No backend: Formspree drops submissions where the hidden _gotcha field is filled.
+export interface Props {
+  source: string;          // tag so the origin is obvious in the inbox
+  subject: string;         // becomes the email subject in the shared inbox
+  privacyHref?: string;    // privacy notice URL; renders as plain text when empty
+  submitLabel: string;
+  nameLabel: string;
+  namePlaceholder?: string;
+  emailLabel: string;
+  emailPlaceholder?: string;
+  consentText: string;
+  privacyLinkText: string;
+  pendingLabel: string;
+  successText: string;
+  errorText: string;
+  hidden?: Record<string, string>;  // extra hidden fields, e.g. { lang: "en" }
+  companyLabel?: string;            // when set, renders an optional company field
+  messageLabel?: string;            // when set, renders an optional message textarea
+  messagePlaceholder?: string;
+  optionalLabel?: string;           // e.g. "optional"
+}
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/xqaywpab";
+const {
+  source, subject, privacyHref, submitLabel, nameLabel, namePlaceholder,
+  emailLabel, emailPlaceholder, consentText, privacyLinkText, pendingLabel,
+  successText, errorText, hidden = {},
+  companyLabel, messageLabel, messagePlaceholder, optionalLabel = "optional",
+} = Astro.props;
+---
+
+<form
+  class="lead"
+  action={FORMSPREE_ENDPOINT}
+  method="POST"
+  data-lead-form
+  data-pending={pendingLabel}
+  data-success={successText}
+  data-error={errorText}
+>
+  <input type="hidden" name="source" value={source} />
+  <input type="hidden" name="_subject" value={subject} />
+  {Object.entries(hidden).map(([k, v]) => <input type="hidden" name={k} value={v} />)}
+
+  <div class="hp" aria-hidden="true">
+    <label for="lead-gotcha">Leave this field empty</label>
+    <input id="lead-gotcha" type="text" name="_gotcha" tabindex="-1" autocomplete="off" />
+  </div>
+
+  <div class="field">
+    <label for="lead-name">{nameLabel}</label>
+    <input id="lead-name" name="name" type="text" required autocomplete="name" placeholder={namePlaceholder} />
+  </div>
+
+  <div class="field">
+    <label for="lead-email">{emailLabel}</label>
+    <input id="lead-email" name="email" type="email" required autocomplete="email" placeholder={emailPlaceholder} />
+  </div>
+
+  {companyLabel && (
+    <div class="field">
+      <label for="lead-company">{companyLabel} <span class="opt">{optionalLabel}</span></label>
+      <input id="lead-company" name="company" type="text" autocomplete="organization" />
+    </div>
+  )}
+
+  {messageLabel && (
+    <div class="field">
+      <label for="lead-message">{messageLabel} <span class="opt">{optionalLabel}</span></label>
+      <textarea id="lead-message" name="message" rows="4" maxlength="2000" placeholder={messagePlaceholder}></textarea>
+    </div>
+  )}
+
+  <div class="consent">
+    <input id="lead-consent" name="consent" type="checkbox" value="yes" required />
+    <label for="lead-consent">
+      {consentText}
+      <a href={privacyHref || undefined} target={privacyHref ? "_blank" : undefined} rel={privacyHref ? "noreferrer" : undefined}>{privacyLinkText}</a>
+    </label>
+  </div>
+
+  <button type="submit" class="cta" data-lead-submit aria-describedby="lead-status">
+    <span data-lead-label>{submitLabel}</span>
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+  </button>
+
+  <p id="lead-status" class="status" role="status" aria-live="polite" data-lead-status></p>
+</form>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>("[data-lead-form]");
+  if (form) {
+    const button = form.querySelector<HTMLButtonElement>("[data-lead-submit]");
+    const label = form.querySelector<HTMLElement>("[data-lead-label]");
+    const status = form.querySelector<HTMLElement>("[data-lead-status]");
+    const inputs = form.querySelectorAll<HTMLInputElement>("input[name=name], input[name=email]");
+    const idle = label?.textContent ?? "";
+
+    const setStatus = (text: string, kind: "ok" | "err" | "") => {
+      if (!status) return;
+      status.textContent = text;
+      status.classList.toggle("ok", kind === "ok");
+      status.classList.toggle("err", kind === "err");
+      inputs.forEach((el) => {
+        if (kind === "err") el.setAttribute("aria-describedby", "lead-status");
+        else el.removeAttribute("aria-describedby");
+      });
+    };
+
+    form.addEventListener("submit", async (event: SubmitEvent) => {
+      event.preventDefault();
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+      setStatus("", "");
+      if (button) button.disabled = true;
+      if (label) label.textContent = form.dataset.pending ?? idle;
+      form.setAttribute("aria-busy", "true");
+
+      const abort = new AbortController();
+      const timer = setTimeout(() => abort.abort(), 20000);
+      try {
+        const res = await fetch(form.action, {
+          method: "POST",
+          body: new FormData(form),
+          headers: { Accept: "application/json" },
+          signal: abort.signal,
+        });
+        if (!res.ok) throw new Error(`Formspree responded ${res.status}`);
+        form.reset();
+        form.querySelectorAll<HTMLElement>(".field, .consent, button").forEach((el) => (el.hidden = true));
+        if (label) label.textContent = idle;
+        setStatus(form.dataset.success ?? "", "ok");
+      } catch (err: unknown) {
+        console.error(err);
+        setStatus(form.dataset.error ?? "", "err");
+        if (button) button.disabled = false;
+        if (label) label.textContent = idle;
+      } finally {
+        clearTimeout(timer);
+        form.removeAttribute("aria-busy");
+      }
+    });
+  }
+</script>

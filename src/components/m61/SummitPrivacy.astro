@@ -1,0 +1,22 @@
+---
+// Privacy notice for the AI Summit 2026 form, rendered per language.
+import NoticePage from "./NoticePage.astro";
+import { notice, routes, type Lang } from "../../data/ai2026summit";
+
+export interface Props { lang: Lang }
+const { lang } = Astro.props;
+const site = "https://m61.ai";
+const alternates = [
+  { hreflang: "en", href: site + routes.en.privacy },
+  { hreflang: "hu", href: site + routes.hu.privacy },
+  { hreflang: "x-default", href: site + routes.en.privacy },
+];
+---
+
+<NoticePage
+  lang={lang}
+  copy={notice[lang]}
+  backHref={routes[lang].form}
+  langLinks={{ en: routes.en.privacy, hu: routes.hu.privacy }}
+  alternates={alternates}
+/>
