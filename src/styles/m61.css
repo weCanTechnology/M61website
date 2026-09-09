@@ -132,12 +132,17 @@ header .slab{align-self:flex-start}
 .doc h2{margin:24px 0 4px; font-weight:800; font-size:16px; letter-spacing:-.005em; text-transform:none; color:var(--ink)}
 .doc h2:first-child{margin-top:0}
 .doc p, .doc li{margin:0; font-size:15.5px; line-height:1.65; color:var(--ink-2); max-width:62ch}
-.doc p b{font-weight:800; color:var(--ink)}
+.doc p b, .doc li b, .doc td b{font-weight:800; color:var(--ink)}
 .doc ul{margin:0; padding-left:22px; display:flex; flex-direction:column; gap:4px}
 .doc a{color:var(--ink); text-underline-offset:3px}
 .doc dl{margin:0; display:grid; grid-template-columns:auto 1fr; gap:6px 20px; font-size:15.5px; line-height:1.55}
 .doc dt{color:var(--ink-3)}
 .doc dd{margin:0; color:var(--ink)}
+.doc .table{overflow-x:auto; border-block:1px solid var(--hair); margin:6px 0}
+.doc table{border-collapse:collapse; width:100%; min-width:520px; font-size:15px}
+.doc th, .doc td{text-align:left; padding:12px 16px 12px 0; vertical-align:top; border-top:1px solid var(--hair); color:var(--ink-2); line-height:1.55}
+.doc thead th{border-top:0; padding-top:14px; font-weight:800; font-size:11px; letter-spacing:.13em; text-transform:uppercase; color:var(--ink-3)}
+.doc td:first-child{color:var(--ink); font-weight:600; padding-right:24px}
 
 /* ---- masthead + language switch ---- */
 .masthead{display:flex; justify-content:space-between; align-items:flex-start; gap:16px}
