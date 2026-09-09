@@ -25,20 +25,17 @@
    Tokens, the slab motif, type scale and spacing follow src/styles/m61.css.
    ========================================================================== */
 :root{
-  --ground:#ffffff;
-  --surface:#f3f1f7;
-  --ink:#000000;
-  --ink-2:rgba(0,0,0,.68);
-  --ink-3:rgba(0,0,0,.45);
-  --hair:rgba(0,0,0,.14);
-  --slab-ink:#ffffff;
-}
-@media (prefers-color-scheme: dark){
-  :root{
-    --ground:#080022; --surface:#110049; --ink:#ffffff;
-    --ink-2:rgba(255,255,255,.68); --ink-3:rgba(255,255,255,.45);
-    --hair:rgba(255,255,255,.15); --slab-ink:#080022;
-  }
+  /* M61 dark palette, applied unconditionally: this handout renders the same
+     for every reader instead of following their OS appearance. Values are the
+     dark branch of m61.css, verbatim. */
+  color-scheme:dark;
+  --ground:#080022;
+  --surface:#110049;
+  --ink:#ffffff;
+  --ink-2:rgba(255,255,255,.68);
+  --ink-3:rgba(255,255,255,.45);
+  --hair:rgba(255,255,255,.15);
+  --slab-ink:#080022;
 }
 
 *{box-sizing:border-box}
