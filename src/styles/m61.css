@@ -135,6 +135,7 @@ header .slab{align-self:flex-start}
 .doc p b, .doc li b, .doc td b{font-weight:800; color:var(--ink)}
 .doc ul{margin:0; padding-left:22px; display:flex; flex-direction:column; gap:4px}
 .doc a{color:var(--ink); text-underline-offset:3px}
+.doc code{font-family:ui-monospace, SFMono-Regular, Menlo, monospace; font-size:.9em; background:var(--surface); padding:1px 5px; border-radius:4px; color:var(--ink)}
 .doc dl{margin:0; display:grid; grid-template-columns:auto 1fr; gap:6px 20px; font-size:15.5px; line-height:1.55}
 .doc dt{color:var(--ink-3)}
 .doc dd{margin:0; color:var(--ink)}
