@@ -9,13 +9,16 @@ export interface Props {
   lang: Lang;
   copy: NoticeCopy;
   backHref: string;
+  /** Notices are noindex by default; the published legal documents opt out. */
+  noindex?: boolean;
+  canonical?: string;
   langLinks?: Record<Lang, string>;
   alternates?: { hreflang: string; href: string }[];
 }
-const { lang, copy: t, backHref, langLinks, alternates = [] } = Astro.props;
+const { lang, copy: t, backHref, noindex = true, canonical, langLinks, alternates = [] } = Astro.props;
 ---
 
-<M61Layout lang={lang} title={t.title} description={t.description} noindex alternates={alternates}>
+<M61Layout lang={lang} title={t.title} description={t.description} noindex={noindex} canonical={canonical} alternates={alternates}>
   <header>
     <div class="masthead">
       <a href={backHref}><Lockup /></a>

@@ -7,10 +7,11 @@ export interface Props {
   title: string;
   description: string;
   noindex?: boolean;
+  canonical?: string;
   lang?: string;
   alternates?: { hreflang: string; href: string }[];
 }
-const { title, description, noindex = false, lang = "en", alternates = [] } = Astro.props;
+const { title, description, noindex = false, canonical, lang = "en", alternates = [] } = Astro.props;
 ---
 
 <!doctype html>
@@ -21,6 +22,7 @@ const { title, description, noindex = false, lang = "en", alternates = [] } = As
     <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
     <title>{title}</title>
+    {canonical && <link rel="canonical" href={canonical} />}
     {alternates.map((a) => <link rel="alternate" hreflang={a.hreflang} href={a.href} />)}
     <link rel="icon" type="image/png" sizes="64x64" href="/images/favicon-64.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png" />
